@@ -1,0 +1,6 @@
+<app-search-bar (searchEvent)="onSearch($event)"></app-search-bar>
+<app-search-results [forecastWeatherData]="forecastWeatherData"
+                    [currentWeatherData]="currentWeatherData"
+                    [groupedDate]="groupedDate"
+                    [errors]="errors">
+</app-search-results>

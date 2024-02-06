@@ -1,0 +1,101 @@
+<div *ngIf="errors.length > 0">
+  <div class="alert alert-danger" role="alert">
+    {{ errors}}
+  </div>
+</div>
+
+
+
+
+<div class="row" *ngIf="errors.length == 0">
+  <div class="col-sm-12 border-bottom border-1 mb-3">
+    <h2 class="text-start">Today Overview</h2>
+  </div>
+  <div
+    class="align-items-start border border-1 border-gray col-md-3 col-sm-12 d-flex flex-column justify-content-start left-cover-state">
+    <div>
+      <h1 class="mx-1">{{ currentWeatherData?.main.temp + " °C" }}</h1>
+    </div>
+    <div>
+      <i class="bi bi-clouds"></i>
+      <label class="mx-1">{{ currentWeatherData?.weather[0].description }}</label>
+    </div>
+    <hr class="w-100 border border-bottom border-black border-1">
+    <div>
+      <i class="bi bi-calendar-event"></i>
+      <label class="mx-1">{{ currentWeatherData?.dt * 1000 | date:'mediumDate' }}</label>
+    </div>
+    <div>
+      <i class="bi bi-geo-fill"></i>
+      <label class="mx-1">{{ currentWeatherData?.name }}</label>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-9 right-cover-state d-flex flex-wrap justify-content-between">
+
+    <div class="weather-card d-flex align-items-center justify-content-start text-start">
+      <i class="bi bi-wind"></i>
+      <div class="weather-details">
+        <div class="weather-title">Wind Speed</div>
+        <div class="weather-value">{{ currentWeatherData?.wind.speed + " km/h"}}</div>
+      </div>
+    </div>
+
+    <div class="weather-card d-flex align-items-center justify-content-start text-start">
+      <i class="bi bi-capslock"></i>
+      <div class="weather-details">
+        <div class="weather-title">Pressure</div>
+        <div class="weather-value">{{ currentWeatherData?.main.pressure + " hPa"}}</div>
+      </div>
+    </div>
+
+    <div class="weather-card d-flex align-items-center justify-content-start text-start">
+      <i class="bi bi-droplet"></i>
+      <div class="weather-details">
+        <div class="weather-title">Humidity</div>
+        <div class="weather-value">{{ currentWeatherData?.main.humidity + " %"}}</div>
+      </div>
+    </div>
+
+    <div class="weather-card d-flex align-items-center justify-content-start text-start">
+      <i class="bi bi-binoculars"></i>
+      <div class="weather-details">
+        <div class="weather-title">Visibility</div>
+        <div class="weather-value">{{ currentWeatherData?.visibility / 1000 + " Km"}}</div>
+      </div>
+    </div>
+
+    <div class="weather-card d-flex align-items-center justify-content-start text-start">
+      <i class="bi bi-sunrise"></i>
+      <div class="weather-details">
+        <div class="weather-title">Sunrise</div>
+        <div class="weather-value">{{ currentWeatherData?.sys.sunrise * 1000 | date: "mediumTime"}}</div>
+      </div>
+    </div>
+
+    <div class="weather-card d-flex align-items-center justify-content-start text-start">
+      <i class="bi bi-sunset"></i>
+      <div class="weather-details">
+        <div class="weather-title">Sunset</div>
+        <div class="weather-value">{{ currentWeatherData?.sys.sunset * 1000 | date: "mediumTime"}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="border border-bottom border-1 mb-3"></div>
+
+  <div>
+    <div class="row">
+      <div class="col-sm-12 mb-1 text-start next-five-days-cover" *ngFor="let item of groupedDate">
+        <h3 class="weather-value">{{ item[0]?.dt * 1000 | date: "mediumDate"}}</h3>
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-lg-3 next-five-days-card" *ngFor="let part of item">
+            <div>
+              <h3 class="weather-title">{{ part?.dt * 1000 | date: "shortTime"}}</h3>
+              <h5 class="weather-value">{{ part?.main.temp + " °C"}}</h5>
+              <h5 class="weather-value">{{ part?.weather[0].main}}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
