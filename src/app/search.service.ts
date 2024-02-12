@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { concat, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,17 +11,26 @@ import { map } from 'rxjs/operators';
 export class SearchService {
   constructor(private http: HttpClient) {}
 
-  search(query: string): Observable<any[]> {
-    if(query == "")
-    {
-      query = "paris"
-    }
-    const forecastWeather = `http://127.0.0.1:3000/forecast_weather/${query}`;
-    const currentWeather = `http://127.0.0.1:3000/current_weather/${query}`;
+  search(query: string, latitude?: number, longitude?: number): Observable<any[]> {
+    const forecastWeatherUrl = `http://localhost:3000/forecast_weather/${query}`;
+    const currentWeatherUrl = `http://localhost:3000/current_weather/${query}`;
 
-    return forkJoin([
-      this.http.get(forecastWeather, { observe: 'response' }).pipe(map(response => response.body)),
-      this.http.get(currentWeather, { observe: 'response' }).pipe(map(response => response.body))
-    ]);
+    const forecastRequest = this.makeRequest(forecastWeatherUrl, latitude, longitude);
+    const currentWeatherRequest = this.makeRequest(currentWeatherUrl, latitude, longitude);
+
+    return forkJoin([forecastRequest, currentWeatherRequest]);
+  }
+
+  private makeRequest(url: string, latitude?: number, longitude?: number): Observable<any> {
+    let params: any = {};
+
+    if (latitude !== undefined && longitude !== undefined) {
+      // Include geolocation data in the request params
+      params = { params: { latitude: latitude.toString(), longitude: longitude.toString() } };
+    }
+
+    return this.http.get(url, { observe: 'response', ...params }).pipe(
+      map((response: any) => response.body)
+    );
   }
 }
